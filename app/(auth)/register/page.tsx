@@ -18,7 +18,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-[#f0ede8] flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden flex w-full max-w-5xl">
-        {/* Left Panel - Image */}
+        
         <div className="hidden md:flex md:w-[45%] relative flex-col min-h-[580px]">
           <div className="absolute inset-0">
             <img
