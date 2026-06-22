@@ -87,41 +87,23 @@ export default function RegisterPage() {
               </div>
             )}
 
-            {/* FIRST NAME */}
-            <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
-                First Name
-              </label>
-              <input
-                type="text"
-                placeholder="John"
-                {...register("firstName")}
-                className="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-sm text-black placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#4a6741]/20 focus:border-[#4a6741]"
-              />
-              {errors.firstName && (
-                <p className="text-red-500 text-sm">
-                  {errors.firstName.message}
-                </p>
-              )}
-            </div>
-
-            {/* LAST NAME */}
-            <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
-                Last Name
-              </label>
-              <input
-                type="text"
-                placeholder="Doe"
-                {...register("lastName")}
-                className="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-sm text-black placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#4a6741]/20 focus:border-[#4a6741]"
-              />
-              {errors.lastName && (
-                <p className="text-red-500 text-sm">
-                  {errors.lastName.message}
-                </p>
-              )}
-            </div>
+            {/* FULL NAME */}
+<div>
+  <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+    Full Name
+  </label>
+  <input
+    type="text"
+    placeholder="John Doe"
+    {...register("fullName")}
+    className="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-sm text-black placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#4a6741]/20 focus:border-[#4a6741]"
+  />
+  {errors.fullName && (
+    <p className="text-red-500 text-sm">
+      {errors.fullName.message}
+    </p>
+  )}
+</div>
 
             {/* USERNAME */}
             <div>
