@@ -1,53 +1,14 @@
-// "use server"; // server side api call
-// import { login, register } from "@/lib/api/auth";
-// import { RegisterFormData } from "@/app/(auth)/_components/schema";
-// import { LoginFormData } from "@/app/(auth)/_components/schema";
-// import { setTokenCookie, storeUserData } from "@/lib/cookies";
 
-// export const handleRegisterUser = async (data: RegisterFormData) => {
-//     try {
-        
-//         const result = await register(data);
-
-//         if (result.success) {
-//             return { success: true, message: result.message, data: result.data };
-//         } else {
-//             return { success: false, message: result.message || 'Registration failed' };
-//         }
-//     } catch (error: Error | any) {
-//         return { success: false, message: error?.message || 'Registration failed' };
-//     }
-// };
-
-// export const handleLoginUser = async (data: LoginFormData) => {
-//     try {
-        
-//         const result = await login(data);
-
-//         //set token 
-//         const user =result.data.user;
-//         const token =result.data.token;
-//         await setTokenCookie(token);
-//         await storeUserData(user);
-        
-//         if (result.success) {
-//             return { success: true, message: result.message, data: result.data };
-//         } else {
-//             return { success: false, message: result.message || 'Login failed' };
-//         }
-//     } catch (error: Error | any) {
-//         return { success: false, message: error?.message || 'Login failed' };
-//     }
-// };
 "use server";
 
-import { login, register } from "@/lib/api/auth";
+import { login, register,whoami,updateUser,updatePassword } from "@/lib/api/auth";
 import {
   RegisterFormData,
   LoginFormData,
 } from "@/app/(auth)/_components/schema";
-import { setTokenCookie, storeUserData } from "@/lib/cookies";
 
+import { setTokenCookie, storeUserData } from "@/lib/cookies";
+import { revalidatePath } from "next/cache";
 type ActionResponse<T = any> = {
   success: boolean;
   message: string;
@@ -122,3 +83,39 @@ export async function handleLoginUser(
     );
   }
 }
+export const handleWhoami = async () => {  
+    try{
+        const result = await whoami();
+        if(result.success){
+            return { success: true, message: result.message, data: result.data }; 
+        }else{
+            return { success: false, message: result.message || 'Fetch user data failed' };    
+        }
+    }catch (error: Error | any){
+        return { success: false, message: error?.message || 'Fetch user data failed' };
+    }
+}
+
+export const handleUpdateUser = async (data: FormData) => {
+    try{
+        const result = await updateUser(data);
+        if(result.success){
+            revalidatePath("/dashboard/profile");
+            return { success: true, message: result.message, data: result.data }; 
+        }else{
+            return { success: false, message: result.message || 'Update user failed' };    
+        }
+    }catch (error: Error | any){
+        return { success: false, message: error?.message || 'Update user failed' };
+    }
+}
+
+export const handleUpdatePassword = async (data: any) => {
+    try {
+        const response = await updatePassword(data);
+        return { success: true, message: response.message };
+    } catch (error: any) {
+        return { success: false, message: error.message };
+    }
+}
+
