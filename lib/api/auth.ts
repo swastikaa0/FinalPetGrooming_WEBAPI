@@ -71,3 +71,54 @@ export const login = async (credentials: any) => {
     );
   }
 };
+
+export const whoami = async () => {
+    try {
+        const response =
+            await axiosInstance.get(API.AUTH.WHOAMI); // path, data
+        return response.data; // reponse ko body
+    } catch (error: Error | any) {
+        throw new Error(error?.response?.data?.message
+            || 'Fetch user data failed');
+    }
+}
+
+export const updateUser = async (data: any) => {
+    try {
+        const response = await axiosInstance
+            .patch(
+                API.AUTH.UPDATE, 
+                data,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data", // multer api
+                    },
+                }
+            );
+        return response.data;
+    } catch (error: Error | any) {
+        throw new Error(error?.response?.data?.message || 'Update user failed');
+    }
+}
+// export const updateUser = async (data: FormData) => {
+//     try {
+//         const response = await axiosInstance.patch(
+//             API.AUTH.UPDATE,
+//             data
+//         );
+//         return response.data;
+//     } catch (error: Error | any) {
+//         throw new Error(error?.response?.data?.message || 'Update user failed');
+//     }
+// }
+
+export const updatePassword = async (data: any) => {
+    try {
+        const response = await axiosInstance.patch(API.AUTH.UPDATE_PASSWORD, data);
+        return response.data; 
+    }
+    catch (error: Error | any) {
+        throw new Error(error?.response?.data?.message
+            || 'Failed to update password');
+    }
+}
