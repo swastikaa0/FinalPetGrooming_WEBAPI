@@ -4,6 +4,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bell, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { handleGetNotifications } from "@/lib/actions/notification-action";
+
 
 const navLinks = [
   { href: "/dashboard", label: "Home" },
@@ -32,27 +35,90 @@ function PawIcon() {
 
 export default function Header() {
   const pathname = usePathname();
-  const notificationCount = 3;
+  const [notificationCount, setNotificationCount] = useState(0);
 
-  return (
-    <header style={{ borderBottom: "1px solid #166534", background: "#4F6F52", color: "white", position: "sticky", top: 0, zIndex: 50 }}>
-      <div style={{ margin: "0 auto", maxWidth: "1440px", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 24px" }}>
+  useEffect(() => {
+  const fetchNotifications = async () => {
+    try {
+      const response = await handleGetNotifications();
 
-        {/* ── Logo ── */}
+      if (response.success) {
+        const unread = response.data.filter(
+          (notification: any) => !notification.isRead
+        ).length;
+
+        setNotificationCount(unread);
+      }
+    } catch (error) {
+      console.error("Failed to fetch notifications", error);
+    }
+  };
+
+  fetchNotifications();
+}, []);
+
+ return (
+    <header
+      style={{
+        borderBottom: "1px solid #166534",
+        background: "#4F6F52",
+        color: "white",
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+      }}
+    >
+      <div
+        style={{
+          margin: "0 auto",
+          maxWidth: "1440px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "14px 24px",
+        }}
+      >
+        {/* Logo */}
         <Link
           href="/dashboard"
-          style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "20px", fontWeight: 700, color: "white", textDecoration: "none" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            fontSize: "20px",
+            fontWeight: 700,
+            color: "white",
+            textDecoration: "none",
+          }}
         >
-          <div style={{ width: "38px", height: "38px", borderRadius: "10px", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <div
+            style={{
+              width: "38px",
+              height: "38px",
+              borderRadius: "10px",
+              background: "rgba(255,255,255,0.15)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <PawIcon />
           </div>
+
           Pets Co.
         </Link>
 
-        {/* ── Navigation ── */}
-        <nav style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+        {/* Navigation */}
+        <nav
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "24px",
+          }}
+        >
           {navLinks.map(({ href, label }) => {
             const isActive = pathname === href;
+
             return (
               <Link
                 key={href}
@@ -63,11 +129,11 @@ export default function Header() {
                   color: "white",
                   textDecoration: "none",
                   paddingBottom: "4px",
-                  borderBottom: isActive ? "2px solid white" : "2px solid transparent",
-                  transition: "opacity 0.15s",
+                  borderBottom: isActive
+                    ? "2px solid white"
+                    : "2px solid transparent",
+                  transition: "opacity .2s",
                 }}
-                onMouseEnter={e => (e.currentTarget.style.opacity = "0.75")}
-                onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
               >
                 {label}
               </Link>
@@ -75,36 +141,76 @@ export default function Header() {
           })}
         </nav>
 
-        {/* ── Right icons ── */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-
-          {/* Notification bell */}
+        {/* Right Side */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          {/* Notification */}
           <Link
-            href="/notifications"
+            href="/notification"
             aria-label="Notifications"
-            style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", width: "38px", height: "38px", borderRadius: "10px", background: "rgba(255,255,255,0.1)", color: "white", textDecoration: "none", transition: "background 0.15s" }}
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.2)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.1)")}
+            style={{
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "38px",
+              height: "38px",
+              borderRadius: "10px",
+              background: "rgba(255,255,255,0.1)",
+              color: "white",
+              textDecoration: "none",
+            }}
           >
-            <Bell size={19} />
+            <Bell size={20} />
+
             {notificationCount > 0 && (
-              <span style={{ position: "absolute", top: "6px", right: "6px", width: "15px", height: "15px", borderRadius: "50%", background: "#ef4444", border: "2px solid #4F6F52", fontSize: "9px", fontWeight: 700, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                {notificationCount > 9 ? "9+" : notificationCount}
+              <span
+                style={{
+                  position: "absolute",
+                  top: "2px",
+                  right: "2px",
+                  minWidth: "18px",
+                  height: "18px",
+                  borderRadius: "999px",
+                  background: "#ef4444",
+                  color: "#fff",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "0 4px",
+                  border: "2px solid #4F6F52",
+                }}
+              >
+                {notificationCount > 99 ? "99+" : notificationCount}
               </span>
             )}
           </Link>
 
-          {/* Profile icon */}
+          {/* Profile */}
           <Link
             href="/profile"
             aria-label="Profile"
-            style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "38px", height: "38px", borderRadius: "10px", background: "rgba(255,255,255,0.1)", color: "white", textDecoration: "none", transition: "background 0.15s" }}
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.2)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.1)")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "38px",
+              height: "38px",
+              borderRadius: "10px",
+              background: "rgba(255,255,255,0.1)",
+              color: "white",
+              textDecoration: "none",
+            }}
           >
-            <User size={19} />
+            <User size={20} />
           </Link>
-
         </div>
       </div>
     </header>
