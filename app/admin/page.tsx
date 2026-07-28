@@ -1,25 +1,36 @@
 import Link from "next/link";
-import { Users, FileText, ArrowRight } from "lucide-react";
+import {
+  Users,
+  Scissors,
+   CalendarCheck,
+  ArrowRight,
+} from "lucide-react";
 
 const CARDS = [
   {
     href: "/admin/users",
     label: "Users",
-    desc: "Manage accounts, roles and access.",
+    desc: "Manage user accounts, roles, and permissions.",
     icon: <Users size={32} />,
   },
   {
-    href: "/admin/blogs",
-    label: "Blogs",
-    desc: "Create, edit and publish posts.",
-    icon: <FileText size={32} />,
+    href: "/admin/services",
+    label: "Services",
+    desc: "Create, update, delete, and manage grooming services.",
+    icon: <Scissors size={32} />,
+  },
+   {
+    href: "/admin/bookings",
+    label: "Bookings",
+    desc: "View and manage all customer appointments.",
+    icon: <CalendarCheck size={32} />,
   },
 ];
+
 
 export default function Page() {
   return (
     <section className="mx-auto w-full max-w-7xl px-8 py-8">
-
       {/* Header */}
       <div className="mb-8 rounded-3xl bg-white p-8 shadow-lg">
         <p className="text-sm font-semibold uppercase tracking-[2px] text-[#4F6F52]">
@@ -31,11 +42,11 @@ export default function Page() {
         </h2>
 
         <p className="mt-2 text-gray-500">
-          Manage your application from one place.
+          Manage your pet grooming application from one place.
         </p>
       </div>
 
-     
+      {/* Cards */}
       <div className="grid gap-8 sm:grid-cols-2">
         {CARDS.map(({ href, label, desc, icon }) => (
           <Link
@@ -62,7 +73,6 @@ export default function Page() {
           </Link>
         ))}
       </div>
-
     </section>
   );
 }
