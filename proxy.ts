@@ -1,40 +1,70 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getTokenCookie, getUserData } from "./lib/cookies";
-const publicRoutes = ["/login", "/register"];
+
+const publicRoutes = ["/login","/register","/forgot-password","/reset-password",
+];
+
 const adminRoutes = ["/admin"];
 
 export async function proxy(request: NextRequest) {
-    const { pathname } = request.nextUrl; // which path
-    const token = await getTokenCookie();
-    const user = await getUserData();
+  const { pathname } = request.nextUrl;
 
-    const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
-    if (!token && !isPublicRoute) {
-        return NextResponse.redirect(new URL("/login", request.url));
+  const token = await getTokenCookie();
+  const user = await getUserData();
+
+  const isPublicRoute = publicRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
+
+  if (!token && !isPublicRoute) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (token && user) {
+    const isAdminRoute = adminRoutes.some((route) =>
+      pathname.startsWith(route)
+    );
+
+    if (isAdminRoute && user.role !== "admin") {
+      return NextResponse.redirect(
+        new URL("/dashboard", request.url)
+      );
     }
 
-    const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route));
-    if (token && user) {
-        if (isAdminRoute && user.role !== "admin") {
-            return NextResponse.redirect(new URL("/unauthorized", request.url));
-        }
-    }
+    if (isPublicRoute) {
+      if (user.role === "admin") {
+        return NextResponse.redirect(
+          new URL("/admin/bookings", request.url)
+        );
+      }
 
-    if (token && isPublicRoute) {
-        return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(
+        new URL("/dashboard", request.url)
+      );
     }
+  }
 
-    // return NextResponse.rewrite(new URL("/login", request.url)); // rewrite to login route
-    return NextResponse.next(); // continue to page
+  return NextResponse.next();
 }
 
 export const config = {
-    matcher: [
-        "/register", // which path to apply
-        "/dashboard",
-        "/login",
-        "/admin/:path*",
-        "/profile",
-        "/password", // match all admin routes 
-    ]
-}
+  matcher: [
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+
+    "/dashboard/:path*",
+    "/bookings/:path*",
+    "/pets/:path*",
+    "/services/:path*",
+    "/payment/:path*",
+    "/notification/:path*",
+    "/profile/:path*",
+    "/password/:path*",
+    "/recommendations/:path*",
+    "/ai_gemini/:path*",
+
+    "/admin/:path*",
+  ],
+};
