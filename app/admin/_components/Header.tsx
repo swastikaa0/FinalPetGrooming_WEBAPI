@@ -1,5 +1,9 @@
 "use client";
 
+
+import { useEffect, useState } from "react";
+import { handleGetNotifications } from "@/lib/actions/notification-action";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bell, LogOut } from "lucide-react";
@@ -8,7 +12,7 @@ import { useAuth } from "@/lib/contexts/AuthContext";
 const NAV = [
   { href: "/admin", label: "Overview", exact: true },
   { href: "/admin/users", label: "Users" },
-  { href: "/admin/blogs", label: "Blogs" },
+  { href: "/admin/services", label: "Services" },
 ];
 
 function PawIcon() {
@@ -33,7 +37,31 @@ export default function Header() {
   const pathname = usePathname();
   const { logout, user } = useAuth();
 
-  const notificationCount = 3;
+  const [notificationCount, setNotificationCount] = useState(0);
+  useEffect(() => {
+  const fetchNotifications = async () => {
+    try {
+      const response = await handleGetNotifications();
+
+      if (response.success) {
+        const unread = response.data.filter(
+          (notification: any) => !notification.isRead
+        ).length;
+
+        setNotificationCount(unread);
+      }
+    } catch (error) {
+      console.error("Failed to fetch notifications", error);
+    }
+  };
+
+  fetchNotifications();
+
+  
+  const interval = setInterval(fetchNotifications, 10000);
+
+  return () => clearInterval(interval);
+}, []);
 
   const isActive = (href: string, exact?: boolean) =>
     exact
@@ -157,7 +185,7 @@ export default function Header() {
 
           {/* Notification */}
           <Link
-            href="/admin/notifications"
+            href="/admin/notification"
             style={{
               position: "relative",
               display: "flex",
@@ -173,26 +201,28 @@ export default function Header() {
             <Bell size={19} />
 
             {notificationCount > 0 && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: "6px",
-                  right: "6px",
-                  width: "15px",
-                  height: "15px",
-                  borderRadius: "50%",
-                  background: "#ef4444",
-                  border: "2px solid #4F6F52",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "9px",
-                  fontWeight: 700,
-                }}
-              >
-                {notificationCount}
-              </span>
-            )}
+  <span
+    style={{
+      position: "absolute",
+      top: "3px",
+      right: "3px",
+      minWidth: "18px",
+      height: "18px",
+      borderRadius: "999px",
+      background: "#ef4444",
+      color: "#fff",
+      fontSize: "10px",
+      fontWeight: 700,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      border: "2px solid #4F6F52",
+      padding: "0 4px",
+    }}
+  >
+    {notificationCount > 99 ? "99+" : notificationCount}
+  </span>
+)}
           </Link>
 
           {/* Logout */}
