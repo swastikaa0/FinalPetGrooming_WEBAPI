@@ -84,29 +84,39 @@ export default async function DashboardPage() {
               </div>
             </div>
 
-            {/* Quick Actions */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-2xl bg-[#CFE7C7] flex flex-col items-center justify-center p-6">
-                <Scissors size={28} />
-                <p className="mt-3 font-medium">Book</p>
-              </div>
 
-              <div className="rounded-2xl bg-[#E6E3DF] flex flex-col items-center justify-center p-6">
-                <FileText size={28} />
-                <p className="mt-3 font-medium">Bookings</p>
-              </div>
+  <Link href="/services">
+    <div className="rounded-2xl bg-[#CFE7C7] hover:bg-[#bdddb3] transition cursor-pointer flex flex-col items-center justify-center p-6">
+      <Scissors size={28} className="text-[#4A6741]" />
+      <p className="mt-3 font-medium text-[#4A6741]">Book</p>
+    </div>
+  </Link>
 
-              <div className="rounded-2xl bg-sky-200 flex flex-col items-center justify-center p-6">
-                <PawPrint size={28} />
-                <p className="mt-3 font-medium">My Pets</p>
-              </div>
+  <Link href="/bookings">
+    <div className="rounded-2xl bg-[#E6E3DF] hover:bg-[#d9d5d1] transition cursor-pointer flex flex-col items-center justify-center p-6">
+      <FileText size={28} className="text-[#4A6741]" />
+      <p className="mt-3 font-medium text-[#4A6741]">Bookings</p>
+    </div>
+  </Link>
 
-              <div className="rounded-2xl bg-[#E6E3DF] flex flex-col items-center justify-center p-6">
-                <Bot size={28} />
-                <p className="mt-3 font-medium">AI Chat</p>
-              </div>
-            </div>
-          </div>
+  <Link href="/pets">
+    <div className="rounded-2xl bg-sky-200 hover:bg-sky-300 transition cursor-pointer flex flex-col items-center justify-center p-6">
+      <PawPrint size={28} className="text-[#4A6741]" />
+      <p className="mt-3 font-medium text-[#4A6741]">My Pets</p>
+    </div>
+  </Link>
+
+  <Link href="/ai/gemini">
+    <div className="rounded-2xl bg-[#E6E3DF] hover:bg-[#d9d5d1] transition cursor-pointer flex flex-col items-center justify-center p-6">
+      <Bot size={28} className="text-[#4A6741]" />
+      <p className="mt-3 font-medium text-[#4A6741]">AI Chat</p>
+    </div>
+  </Link>
+
+</div>
+
+</div>
         </section>
 
         {/* Popular Services */}
@@ -216,5 +226,7 @@ export default async function DashboardPage() {
       </main>
 
     </div>
+    
   );
+  
 }
