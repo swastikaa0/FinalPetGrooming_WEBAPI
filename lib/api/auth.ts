@@ -122,3 +122,50 @@ export const updatePassword = async (data: any) => {
             || 'Failed to update password');
     }
 }
+
+export const forgotPassword = async (email: string) => {
+  const response = await axiosInstance.post(
+    API.AUTH.FORGOT_PASSWORD,
+    { email }
+  );
+
+  return response.data;
+};
+
+// export const resetPassword = async (
+//   token: string,
+//   password: string,
+//   confirmPassword: string
+// ) => {
+//   const response = await axiosInstance.post(
+//     API.AUTH.RESET_PASSWORD,
+//     {
+//       token,
+//       password,
+//       confirmPassword,
+//     }
+//   );
+
+//   return response.data;
+// };
+
+export const resetPassword = async (
+  token: string,
+  password: string,
+  confirmPassword: string
+) => {
+  console.log("API called");
+
+  const response = await axiosInstance.post(
+    API.AUTH.RESET_PASSWORD,
+    {
+      token,
+      password,
+      confirmPassword,
+    }
+  );
+
+  console.log(response.data);
+
+  return response.data;
+};
