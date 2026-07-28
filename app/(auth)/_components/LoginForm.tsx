@@ -30,17 +30,25 @@ export default function LoginPage() {
     setError("");
 
     startTransition(async () => {
-      try {
-        const result = await handleLoginUser(data);
+     
+       try {
+      const result = await handleLoginUser(data);
 
-        if (result.success) {
-          router.push("/dashboard");
-        } else {
-          setError(result.message || "Login failed");
-        }
-      } catch (error: any) {
-        setError(error?.message || "Login failed");
+      if (!result.success) {
+        setError(result.message || "Login failed");
+        return;
       }
+
+      const role = result.data?.user?.role;
+
+      if (role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error: any) {
+      setError(error?.message || "Login failed");
+    }
     });
   };
 
@@ -111,7 +119,7 @@ export default function LoginPage() {
                 </label>
 
                 <a
-                  href="#"
+                  href="/forgot-password"
                   className="text-xs text-gray-500 hover:text-[#4a6741]"
                 >
                   Forgot Password?

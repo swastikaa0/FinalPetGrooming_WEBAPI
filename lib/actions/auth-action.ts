@@ -1,7 +1,7 @@
 
 "use server";
 
-import { login, register,whoami,updateUser,updatePassword } from "@/lib/api/auth";
+import { login, register,whoami,updateUser,updatePassword, resetPassword, forgotPassword } from "@/lib/api/auth";
 import {
   RegisterFormData,
   LoginFormData,
@@ -119,3 +119,44 @@ export const handleUpdatePassword = async (data: any) => {
     }
 }
 
+export async function handleForgotPassword(email: string): Promise<ActionResponse> {
+  try {
+    const response = await forgotPassword(email);
+
+    return buildResponse(
+      true,
+      response.message,
+      response.data
+    );
+  } catch (err: any) {
+    return buildResponse(
+      false,
+      err?.message ?? "Failed to send reset link"
+    );
+  }
+}
+
+export async function handleResetPassword(
+  token: string,
+  password: string,
+  confirmPassword: string
+): Promise<ActionResponse> {
+  try {
+    const response = await resetPassword(
+      token,
+      password,
+      confirmPassword
+    );
+
+    return buildResponse(
+      true,
+      response.message,
+      response.data
+    );
+  } catch (err: any) {
+    return buildResponse(
+      false,
+      err?.message ?? "Failed to reset password"
+    );
+  }
+}
