@@ -1,6 +1,6 @@
 
 "use client";
-
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bell, User } from "lucide-react";
@@ -15,23 +15,23 @@ const navLinks = [
   { href: "/profile", label: "Profile" },
 ];
 
-function PawIcon() {
-  return (
-    <svg
-      width="28"
-      height="28"
-      viewBox="0 0 28 28"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <ellipse cx="7" cy="7.5" rx="2.8" ry="3.5" fill="white" fillOpacity="0.9" />
-      <ellipse cx="21" cy="7.5" rx="2.8" ry="3.5" fill="white" fillOpacity="0.9" />
-      <ellipse cx="10.5" cy="4.5" rx="2.4" ry="3" fill="white" fillOpacity="0.9" />
-      <ellipse cx="17.5" cy="4.5" rx="2.4" ry="3" fill="white" fillOpacity="0.9" />
-      <ellipse cx="14" cy="18" rx="6.5" ry="7.5" fill="white" fillOpacity="0.9" />
-    </svg>
-  );
-}
+// function PawIcon() {
+//   return (
+//     <svg
+//       width="28"
+//       height="28"
+//       viewBox="0 0 28 28"
+//       fill="none"
+//       xmlns="http://www.w3.org/2000/svg"
+//     >
+//       <ellipse cx="7" cy="7.5" rx="2.8" ry="3.5" fill="white" fillOpacity="0.9" />
+//       <ellipse cx="21" cy="7.5" rx="2.8" ry="3.5" fill="white" fillOpacity="0.9" />
+//       <ellipse cx="10.5" cy="4.5" rx="2.4" ry="3" fill="white" fillOpacity="0.9" />
+//       <ellipse cx="17.5" cy="4.5" rx="2.4" ry="3" fill="white" fillOpacity="0.9" />
+//       <ellipse cx="14" cy="18" rx="6.5" ry="7.5" fill="white" fillOpacity="0.9" />
+//     </svg>
+//   );
+// }
 
 export default function Header() {
   const pathname = usePathname();
@@ -92,18 +92,26 @@ export default function Header() {
           }}
         >
           <div
-            style={{
-              width: "38px",
-              height: "38px",
-              borderRadius: "10px",
-              background: "rgba(255,255,255,0.15)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <PawIcon />
-          </div>
+  style={{
+    width: "42px",
+    height: "42px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  }}
+>
+  <Image
+    src="/Logo 2.png"
+    alt="Pets Co Logo"
+    width={42}
+    height={42}
+    priority
+    style={{
+      borderRadius: "8px", // Rounded corners
+      objectFit: "cover",
+    }}
+  />
+</div>
 
           Pets Co.
         </Link>
