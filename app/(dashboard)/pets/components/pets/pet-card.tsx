@@ -21,13 +21,22 @@ export default function PetCard({ pet }: PetCardProps) {
 
       {/* Pet Image */}
       <div className="relative h-60 w-full">
-        <Image
-          src={pet.image}
-          alt={pet.name}
-          fill
-          className="object-cover"
-        />
-      </div>
+  {pet.image ? (
+    <Image
+      src={pet.image}
+      alt={pet.name}
+      fill
+      className="object-cover"
+    />
+  ) : (
+    <Image
+      src="/no-pet.png"
+      alt="No pet image"
+      fill
+      className="object-cover"
+    />
+  )}
+</div>
 
 
       {/* Pet Information */}
